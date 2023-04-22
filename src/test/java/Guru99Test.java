@@ -19,7 +19,7 @@ import java.util.logging.FileHandler;
 import java.util.logging.Logger;
 import static org.junit.Assert.assertEquals;
 public class Guru99Test {
-    private WebDriver driver;
+    public WebDriver driver;
     WebDriverWait wait;
     Logger logger;
     @Before
@@ -121,7 +121,7 @@ public class Guru99Test {
     //Napusz metodę testową, ktora przetestuje niepoprawne logowanie
     //Użyj metod logIn oraz verifyLogIn
     @Test
-    public void addUser2()
+    public void addUser1Test()
     {
         logIn("mngr495031", "UzEbyvE");
         WebElement newCustomerBtn = driver.findElement(By.linkText("New Customer")); //zagrożenie, gdyby jezyk był zmieniony, to trzeba by było zmienić linktext w kodzie
@@ -138,7 +138,6 @@ public class Guru99Test {
             WebElement closeBtn = driver.findElement(By.id("dismiss-button"));
             closeBtn.click();
         }
-
 
         WebElement customerNameTxtFld = driver.findElement(By.name("name"));
         customerNameTxtFld.sendKeys("Seba");
@@ -169,9 +168,24 @@ public class Guru99Test {
 
     }
 
+    public String addUser2(String customerName, boolean isFemale, String dob, String address, String city, String state, String pin, String telephone, String email, String password)
+            {
+                customerName = "Seba";
+                isFemale = false;
+                dob = "25/02/2005";
+                address = "ul Testowa 1";
+                city = "Testowo";
+                state = "Texas";
+                pin = "123456";
+                telephone = "123456789";
+                email = "testet@com";
+                password = "test123";
+                return null;
+    }
+
     @Test
-    public void addUserTest()
-    {
+        public void addUser2Test() {
+
         logIn("mngr495031", "UzEbyvE");
         WebElement newCustomerBtn = driver.findElement(By.linkText("New Customer")); //zagrożenie, gdyby jezyk był zmieniony, to trzeba by było zmienić linktext w kodzie
         newCustomerBtn.click();
@@ -188,74 +202,38 @@ public class Guru99Test {
             closeBtn.click();
         }
 
+        // Create an array with the data in the same order in which you expect to be filled in the web form. Add a gender in the separate variable.
+        String[] customerData = {"Seba", "25/02/2005", "ul Testowa 1", "Testowo", "Texas", "123456", "123456789", "mam2@dada.com", "test123"};
+        boolean isFemale = false;
+
         WebElement customerNameTxtFld = driver.findElement(By.name("name"));
-        customerNameTxtFld.sendKeys("Seba");
-        WebElement genderRadioBtn = driver.findElement(By.xpath("/html/body/table/tbody/tr/td/table/tbody/tr[5]/td[2]/input[1]"));
-        genderRadioBtn.click();
+        customerNameTxtFld.sendKeys(customerData[0]);
+        if (isFemale) {
+            WebElement genderRadioBtn = driver.findElement(By.xpath("/html/body/table/tbody/tr/td/table/tbody/tr[5]/td[2]/input[2]"));
+            genderRadioBtn.click();
+        } else {
+            WebElement genderRadioBtn = driver.findElement(By.xpath("/html/body/table/tbody/tr/td/table/tbody/tr[5]/td[2]/input[1]"));
+            genderRadioBtn.click();
+        }
         WebElement dobTxtFld = driver.findElement(By.id("dob"));
-        dobTxtFld.sendKeys("25/02/2005");
+        dobTxtFld.sendKeys(customerData[1]);
         WebElement addressTxtFld = driver.findElement(By.name("addr"));
-        addressTxtFld.sendKeys("ul Testowa 1");
+        addressTxtFld.sendKeys(customerData[2]);
         WebElement cityTxtFld = driver.findElement(By.name("city"));
-        cityTxtFld.sendKeys("Testowo");
+        cityTxtFld.sendKeys(customerData[3]);
         WebElement stateTxtFld = driver.findElement(By.name("state"));
-        stateTxtFld.sendKeys("Texas");
+        stateTxtFld.sendKeys(customerData[4]);
         WebElement pinTxtFld = driver.findElement(By.name("pinno"));
-        pinTxtFld.sendKeys("123456");
-        WebElement telephoneTxtFld = driver.findElement(By.name("telephoneno"));
-        telephoneTxtFld.sendKeys("123456789");
+        pinTxtFld.sendKeys(customerData[5]);
+        WebElement mobileNumberTxtFld = driver.findElement(By.name("telephoneno"));
+        mobileNumberTxtFld.sendKeys(customerData[6]);
         WebElement emailTxtFld = driver.findElement(By.name("emailid"));
-        emailTxtFld.sendKeys("testeroawdy@test.com");
+        emailTxtFld.sendKeys(customerData[7]);
         WebElement passwordTxtFld = driver.findElement(By.name("password"));
-        passwordTxtFld.sendKeys("test123");
+        passwordTxtFld.sendKeys(customerData[8]);
         WebElement submitBtn = driver.findElement(By.name("sub"));
         submitBtn.click();
     }
-
-    @Test
-
-
-//    @Test
-//    public void addUser2()
-//    {
-//        String customerName = "Sebaaa";
-//        boolean isFemale = false;
-//        String dob = "25/02/2005";
-//        String address = "ul Testowa 2";
-//        String city = "Testowol";
-//        String state = "Texas";
-//        String pin = "123456";
-//        String mobileNumber = "123456789";
-//        String email = "testerowy2@test.com";
-//        String password = "test1234";
-//    }
-//        public void addUser(customerName, isFemale, dob, address, city, state, pin, mobileNumber, email, password);
-//        {
-//            WebElement customerNameTxtFld = driver.findElement(By.name("name"));
-//            customerNameTxtFld.sendKeys(customerName);
-//            WebElement genderRadioBtn = driver.findElement(By.xpath("/html/body/table/tbody/tr/td/table/tbody/tr[5]/td[2]/input[2]"));
-//            if (isFemale) {
-//                genderRadioBtn.click();
-//            }
-//            WebElement dobTxtFld = driver.findElement(By.id("dob"));
-//            dobTxtFld.sendKeys(dob);
-//            WebElement addressTxtFld = driver.findElement(By.name("addr"));
-//            addressTxtFld.sendKeys(address);
-//            WebElement cityTxtFld = driver.findElement(By.name("city"));
-//            cityTxtFld.sendKeys(city);
-//            WebElement stateTxtFld = driver.findElement(By.name("state"));
-//            stateTxtFld.sendKeys(state);
-//            WebElement pinTxtFld = driver.findElement(By.name("pinno"));
-//            pinTxtFld.sendKeys(pin);
-//            WebElement mobileNumberTxtFld = driver.findElement(By.name("telephoneno"));
-//            mobileNumberTxtFld.sendKeys(mobileNumber);
-//            WebElement emailTxtFld = driver.findElement(By.name("emailid"));
-//            emailTxtFld.sendKeys(email);
-//            WebElement passwordTxtFld = driver.findElement(By.name("password"));
-//            passwordTxtFld.sendKeys(password);
-//            WebElement submitBtn = driver.findElement(By.name("sub"));
-//            submitBtn.click();
-//        }
 
     @After
 //                metoda o tym atrybucie bedzie wykonana Po teście
@@ -265,6 +243,7 @@ public class Guru99Test {
     1. Sprawdź czy po dodaniu klienta, w tabeli z klientami, pojawia się nowy klient
     2. Sprawdź czy po dodaniu klienta, można edytować jego dane w tabeli z klientami
     3. Sprawdź zgodność wprowadzonych danych z danymi w tabeli z klientami.
+        3a. wyskoczy reklama, trzeba ją zamknąć
      */
 
     public void testDown ()
