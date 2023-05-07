@@ -4,11 +4,14 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.openqa.selenium.By;
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.FluentWait;
+import org.openqa.selenium.support.ui.Wait;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
@@ -37,55 +40,63 @@ public class Guru99BankApp {
     }
 
     public void logIn(String logIn, String pswd)
-    /* możemy też przetestowac rozne hasla poprzez wyznaczenie String ze zmiennymi logIn i pswd (password)
-     *
-     * */
-        {
-            logIn = "mngr495031";
-            pswd = "UzEbyvE";
+        /* możemy też przetestowac rozne hasla poprzez wyznaczenie String ze zmiennymi logIn i pswd (password)
+         *
+         * */
+    {
+        logIn = "mngr495031";
+        pswd = "UzEbyvE";
 
-            WebElement logInTxtFld = driver.findElement(By.name("uid"));
-            logInTxtFld.sendKeys(logIn);
+        WebElement logInTxtFld = driver.findElement(By.name("uid"));
+        logInTxtFld.sendKeys(logIn);
 
-            WebElement passwordTxtFld = driver.findElement(By.name("password"));
-            passwordTxtFld.sendKeys(pswd);
+        WebElement passwordTxtFld = driver.findElement(By.name("password"));
+        passwordTxtFld.sendKeys(pswd);
 
-            WebElement loginButton = driver.findElement(By.name("btnLogin"));
-            loginButton.click();
-        }
+        WebElement loginButton = driver.findElement(By.name("btnLogin"));
+        loginButton.click();
+    }
 
     public String addUser2(String customerName, boolean isFemale, String dob, String address, String city, String state, String pin, String telephone, String email, String password)
-            {
-                customerName = "Seba";
-                isFemale = false;
-                dob = "25/02/2005";
-                address = "ul Testowa 1";
-                city = "Testowo";
-                state = "Texas";
-                pin = "123456";
-                telephone = "123456789";
-                email = "teste2t@com";
-                password = "test123";
-                return null;
+    {
+        customerName = "Seba";
+        isFemale = false;
+        dob = "25/02/2005";
+        address = "ul Testowa 1";
+        city = "Testowo";
+        state = "Texas";
+        pin = "123456";
+        telephone = "123456789";
+        email = "teste2t@com";
+        password = "test123";
+        return null;
     }
 
     @Test
-        public void addUser2Test() {
+    public void addUser2Test() {
 
         logIn("mngr495031", "UzEbyvE");
         WebElement newCustomerBtn = driver.findElement(By.linkText("New Customer")); //zagrożenie, gdyby jezyk był zmieniony, to trzeba by było zmienić linktext w kodzie
         newCustomerBtn.click();
         driver.get("https://demo.guru99.com/v4/manager/addcustomerpage.php");
+        // Waiting 5 seconds for an element to be present on the page, checking
+        // for its presence once every 2 seconds.
+        // If element is not visible for 5 seconds, then go to the next step.
+        // If element is visible, then click on it and go to the next step.
+
+        Wait<WebDriver> fluentWait = new FluentWait(driver)
+                .withTimeout(Duration.ofSeconds(5))
+                .pollingEvery(Duration.ofSeconds(2))
+                .ignoring(NoSuchElementException.class);
 
         try {
-            Thread.sleep(5000);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
-        if(driver.findElements(By.id("dismiss-button")).size()>0)
-        {
-            WebElement closeBtn = driver.findElement(By.id("dismiss-button"));
-            closeBtn.click();
+            WebElement Advertisement = fluentWait.until(ExpectedConditions.visibilityOfElementLocated(By.id("dismiss-button")));
+            if (driver.findElements(By.id("dismiss-button")).size() > 0) {
+                WebElement closeBtn = driver.findElement(By.id("dismiss-button"));
+                closeBtn.click();
+            }
+        } catch (Exception e) {
+            System.out.println("No advertisement");
         }
 
         // Create an array with the data in the same order in which you expect to be filled in the web form. Add a gender in the separate variable.
