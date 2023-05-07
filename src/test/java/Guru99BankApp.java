@@ -15,7 +15,11 @@ import org.openqa.selenium.support.ui.Wait;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
+import java.util.Random;
 import java.util.logging.Logger;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class Guru99BankApp {
     public WebDriver driver;
@@ -38,6 +42,11 @@ public class Guru99BankApp {
         WebElement acceptCookies = driver.findElement(By.xpath("//*[@id='save']/span[1]/div/span"));
         acceptCookies.click();
     }
+    @After
+    public void ripAndTear ()
+    {
+        driver.close();
+    }
 
     public void logIn(String logIn, String pswd)
         /* możemy też przetestowac rozne hasla poprzez wyznaczenie String ze zmiennymi logIn i pswd (password)
@@ -56,25 +65,62 @@ public class Guru99BankApp {
         WebElement loginButton = driver.findElement(By.name("btnLogin"));
         loginButton.click();
     }
+//    public static class randomMailGen {
+////            @Test
+//        // this is random mail generator class
+//        public void randomMailGen() {
+//            String SALTCHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
+//            StringBuilder salt = new StringBuilder();
+//            Random rnd = new Random();
+//            while (salt.length() < 10) { // length of the random string.
+//                int index = (int) (rnd.nextFloat() * SALTCHARS.length());
+//                salt.append(SALTCHARS.charAt(index));
+//            }
+//            String saltStr = salt.toString();
+//            // make assertion that the string is not null
+//            Assert.assertNotNull(saltStr);
+//            System.out.println(saltStr+"@gmail.com");
+//
+//        }
+//    }
+    // create a public String with customerData as an array,
+    // that defines the data types of the variables and can be initialised in another method
+    public String [] customerData;
 
-    public String addUser2(String customerName, boolean isFemale, String dob, String address, String city, String state, String pin, String telephone, String email, String password)
     {
-        customerName = "Seba";
-        isFemale = false;
-        dob = "25/02/2005";
-        address = "ul Testowa 1";
-        city = "Testowo";
-        state = "Texas";
-        pin = "123456";
-        telephone = "123456789";
-        email = "teste2t@com";
-        password = "test123";
-        return null;
+        /* data types like here:
+        String customerName,String dateOfBirth, String address, String city, String state,
+        String pin, String telephone, String email, String password
+         * Can be initialised in another method
+         */
+        customerData = new String[]{"Seba", "25/02/2005", "ul Testowa 1", "Testowo", "Texas", "123456", "123456789", "mail.tsasda@gmail.com", "test123"};
+        // call a method in which you get a randomly generated mail
+        // add +@gmail.com to it
+        // update customerData[7] with it
+        // create a public void that will return updated customerData[7]
+        // call it in the method below
     }
-
+//    @Test
+        public void randomMailGenToSend(){
+            String SALTCHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
+            StringBuilder salt = new StringBuilder();
+            Random rnd = new Random();
+            while (salt.length() < 10) { // length of the random string.
+                int index = (int) (rnd.nextFloat() * SALTCHARS.length());
+                salt.append(SALTCHARS.charAt(index));
+            }
+            String saltStr = salt.toString();
+            customerData[7] = saltStr + "@gmail.com";
+            // make assertion that the string is not longer than 20 characters
+            Assert.assertTrue(customerData[7].length() <= 20);
+            System.out.println(customerData[7]);
+        }
+    public boolean isFemale;
+    {
+        isFemale = false;
+    }
     @Test
-    public void addUser2Test() {
-
+    public void addUser() {
         logIn("mngr495031", "UzEbyvE");
         WebElement newCustomerBtn = driver.findElement(By.linkText("New Customer")); //zagrożenie, gdyby jezyk był zmieniony, to trzeba by było zmienić linktext w kodzie
         newCustomerBtn.click();
@@ -88,7 +134,6 @@ public class Guru99BankApp {
                 .withTimeout(Duration.ofSeconds(5))
                 .pollingEvery(Duration.ofSeconds(2))
                 .ignoring(NoSuchElementException.class);
-
         try {
             WebElement Advertisement = fluentWait.until(ExpectedConditions.visibilityOfElementLocated(By.id("dismiss-button")));
             if (driver.findElements(By.id("dismiss-button")).size() > 0) {
@@ -96,13 +141,21 @@ public class Guru99BankApp {
                 closeBtn.click();
             }
         } catch (Exception e) {
-            System.out.println("No advertisement");
+            System.out.println("No advertisement. Good!");
         }
 
-        // Create an array with the data in the same order in which you expect to be filled in the web form. Add a gender in the separate variable.
-        String[] customerData = {"Seba", "25/02/2005", "ul Testowa 1", "Testowo", "Texas", "123456", "123456789", "mamd2@dada.com", "test123"};
-        boolean isFemale = false;
+        /*
+        DEPRECATED! MOVED TO ANOTHER METHOD
+        Create an array with the data in the same order in which you expect to be filled in the web form.
+        Add a gender in the separate variable.
+        customerData = {"Seba", "25/02/2005", "ul Testowa 1", "Testowo", "Texas", "123456", "123456789", "testdf3d@dada.com", "test123"};
+        */
+        // call randomMailGenToSend method and update customerData[7] with it
 
+        // create a public void that will return updated customerData[7]
+        // call it in the method below
+        randomMailGenToSend();
+        System.out.println(customerData[7]);
         WebElement customerNameTxtFld = driver.findElement(By.name("name"));
         customerNameTxtFld.sendKeys(customerData[0]);
         if (isFemale) {
@@ -130,9 +183,13 @@ public class Guru99BankApp {
         passwordTxtFld.sendKeys(customerData[8]);
         WebElement submitBtn = driver.findElement(By.name("sub"));
         submitBtn.click();
-    }
 
-    @After
+//         Make assertion whether the customer ID was generated or not
+        String customerID = driver.findElement(By.xpath("//*[@id=\"customer\"]/tbody/tr[1]/td/p")).getText();
+        // assertEqual where if the customerID element contains the text inside xPath then the test is passed
+        assertTrue(customerID.contains("Customer Registered Successfully!!!"));
+        System.out.println("Customer ID: " + customerID);
+    }
 //                metoda o tym atrybucie bedzie wykonana Po teście
 
     /*
@@ -142,9 +199,4 @@ public class Guru99BankApp {
     3. Sprawdź zgodność wprowadzonych danych z danymi w tabeli z klientami.
         3a. wyskoczy reklama, trzeba ją zamknąć
      */
-
-    public void testDown ()
-    {
-        driver.close();
-    }
 }
