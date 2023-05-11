@@ -12,7 +12,7 @@
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
-      <module name="Guru99Test2" options="--add-exports jakarta.activation/org.openqa.selenium.support.ui=ALL-UNNAMED --add-exports jakarta.activation/org.openqa.selenium.chrome=ALL-UNNAMED --add-exports jakarta.activation/org.openqa.selenium=ALL-UNNAMED --add-exports jakarta.activation/org.openqa.selenium.firefox=ALL-UNNAMED --add-exports jakarta.activation/org.openqa.selenium.interactions=ALL-UNNAMED" />
+      <module name="Guru99Test2" options="" />
     </option>
   </component>
 </project>
